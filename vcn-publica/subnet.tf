@@ -1,0 +1,17 @@
+#
+# vcn-publica/subnet.tf
+#
+
+# Sub-rede Publica #1 (subnpub-1)
+resource "oci_core_subnet" "subnpub-1_vcn-publica" {
+    compartment_id = var.root_compartment
+    vcn_id = oci_core_vcn.vcn-publica.id
+    dhcp_options_id = oci_core_dhcp_options.dhcp-options_vcn-publica.id
+    route_table_id = oci_core_route_table.rt_subnpub-1_vcn-publica.id
+    security_list_ids = [oci_core_security_list.secl-1_subnpub-1_vcn-publica.id]
+
+    display_name = "subnpub-1"
+    dns_label = "subnpub1"
+    cidr_block = "${var.subnpub_cidr}"
+    prohibit_public_ip_on_vnic = true
+}

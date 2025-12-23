@@ -1,3 +1,7 @@
+*.key
+*.pub
+terraform.tfvars
+
 # Local .terraform directories
 .terraform/
 

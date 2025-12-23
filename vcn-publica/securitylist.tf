@@ -1,0 +1,17 @@
+#
+# vcn-publica/securitylist.tf
+#
+
+# Security List - Sub-rede Publica #1 (subnpub-1)
+resource "oci_core_security_list" "secl-1_subnpub-1_vcn-publica" {
+    compartment_id = var.root_compartment
+    vcn_id = oci_core_vcn.vcn-publica.id
+    display_name = "secl-1_subnpub-1"
+
+    egress_security_rules {
+        destination = "0.0.0.0/0"
+        destination_type = "CIDR_BLOCK"
+        protocol = "all"
+        stateless = false
+    }
+}
