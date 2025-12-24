@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -z "$(which curl)" ]; then
    echo "[ERROR] Need curl command to continue. Exiting..."

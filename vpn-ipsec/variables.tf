@@ -8,8 +8,13 @@ variable "root_compartment" {
 }
 
 variable "cpe_ip" {
-    description = "Endereço IP do CPE."
+    description = "Endereço IP Público do CPE."
     type = string  
+}
+
+variable "cpe_private-ip" {
+    description = "Endereço IP Privado do CPE."
+    type = string
 }
 
 variable "drg_id" {
@@ -17,13 +22,12 @@ variable "drg_id" {
     type = string  
 }
 
-variable "onpremises_vm-ipsec_ip" {
-    description = "Endereço IP Privado da VM On-premises IPSec."
-    type = string
-}
+#-----#
+# ASN #
+#-----#
 
 variable "ipsec-onpremises_asn" {
-    description = "BGP ASN."
+    description = "On-premises BGP ASN."
     type = string
 }
 

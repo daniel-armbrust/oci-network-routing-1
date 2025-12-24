@@ -2,8 +2,8 @@
 # reserved-public-ip/public-ip.tf
 #
 
-resource "oci_core_public_ip" "ipsec_reserved-public-ip" {    
+resource "oci_core_public_ip" "reserved-public-ip" {    
     compartment_id = var.root_compartment
-    display_name = "ipsec_public-ip"
+    display_name = "reserved-public_public-ip"
     lifetime = "RESERVED"
 }

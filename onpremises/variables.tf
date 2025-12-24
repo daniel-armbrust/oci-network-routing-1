@@ -22,32 +22,31 @@ variable "sgw_all_oci_services" {
     type = string
 }
 
-variable "vcn_cidr" {
-    type = string
-}
-
-variable "subnpub-internet_cidr" {
-    description = "Sub-rede Publica."
-    type = string
-}
-
-variable "subnprv-rede-app_cidr" {
-    description = "Sub-rede privada das VMs de Aplicação On-premises."
-    type = string
-}
-
-variable "subnprv-rede-backup_cidr" {
-    description = "Sub-rede privada da Rede de Backup On-premises."
-    type = string
-}
-
 variable "meu_ip-publico" {
     description = "Meu endereço IP Publico."
     type = string
 }
 
-variable "vm-ipsec_ip" {
-    description = "Endereço IP Privado da VM-IPSEC On-premises."
+variable "vcn_cidr" {
+    type = list
+}
+
+#---------------------#
+# VM IPSec - Internet #
+#---------------------#
+
+variable "vm-ipsec_internet_cidr" {
+    description = "CIDR da Rede de Internet."
+    type = string
+}
+
+variable "vm-ipsec_internet-ip" {
+    description = "Endereço IP Privado da VNIC de Internet."
+    type = string
+}
+
+variable "vm-ipsec_internet-ip-gw" {
+    description = "Endereço IP Privado do Gateway da VNIC de Internet."
     type = string
 }
 
@@ -60,3 +59,109 @@ variable "vm-ipsec_public-ip_id" {
     description = "OCID do Endereço IP Publico Reservado da VM-IPSEC On-premises."
     type = string
 }
+
+variable "reserved-public-ip_id" {
+    description = "OCID do Endereço IP Público Reservado."
+    type = string
+}
+
+#--------------------------------#
+# VM IPSec - Rede das Aplicações #
+#--------------------------------#
+
+variable "vm-ipsec_rede-app_cidr" {
+    description = "CIDR da Rede das Aplicações."
+    type = string
+}
+
+variable "vm-ipsec_rede-app-ip" {
+    description = "Endereço IP Privado da VNIC da Rede das Aplicações."
+    type = string
+}
+
+variable "vm-ipsec_rede-app-ip-gw" {
+    description = "Endereço IP Privado do Gateway da VNIC da Rede das Aplicações."
+    type = string
+}
+
+#---------------------------#
+# VM IPSec - Rede de Backup #
+#---------------------------#
+
+variable "vm-ipsec_rede-backup_cidr" {
+    description = "CIDR da Rede de Backup."
+    type = string
+}
+
+variable "vm-ipsec_rede-backup-ip" {
+    description = "Endereço IP Privado da VNIC da Rede de Backup."
+    type = string
+}
+
+variable "vm-ipsec_rede-backup-ip-gw" {
+    description = "Endereço IP Privado do Gateway da VNIC da Rede de Backup."
+    type = string
+}
+
+#-----#
+# ASN #
+#-----#
+
+variable "ipsec-onpremises_asn" {
+    description = "On-premises BGP ASN."
+    type = string
+}
+
+variable "ipsec_oracle_asn" {
+    description = "Oracle BGP ASN."
+    type = string
+}
+
+#-----------#
+# Tunnel #1 #
+#-----------#
+
+variable "ipsec_tunnel-1_bgp_ip" {
+    description = "On-premises IPSec Tunnel #1 - BGP IP"
+    type = string
+}
+
+variable "ipsec_tunnel-1_oci_ip" {
+    description = "OCI IPSec Tunnel #1 - BGP IP"
+    type = string
+}
+
+variable "ipsec_tunnel-1_oci-public-ip" {
+    description = "OCI IPSec Tunnel #1 - IP Público"
+    type = string
+}
+
+variable "ipsec_tunnel-1_shared-secret" {
+    description = "OCI IPSec Shared Secret #1 - IP Público"
+    type = string
+}
+
+#-----------#
+# Tunnel #2 #
+#-----------#
+
+variable "ipsec_tunnel-2_bgp_ip" {
+    description = "On-premises IPSec Tunnel #2 - BGP IP"
+    type = string
+}
+
+variable "ipsec_tunnel-2_oci_ip" {
+    description = "OCI IPSec Tunnel #2 - BGP IP"
+    type = string
+}
+
+variable "ipsec_tunnel-2_oci-public-ip" {
+    description = "OCI IPSec Tunnel #2 - IP Público"
+    type = string
+}
+
+variable "ipsec_tunnel-2_shared-secret" {
+    description = "OCI IPSec Tunnel #2 - IP Público"
+    type = string
+}
+

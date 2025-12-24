@@ -92,11 +92,10 @@ module "vm-firewall" {
     subnpub-internet_id = module.vcn-fw-interno.subnpub-internet_id
 
     # On-premises
-    onpremises_cidr = local.vcn-onpremises_cidr
-    onpremises_rede-app_cidr = local.vcn-onpremises_subnprv-rede-app_cidr
-    onpremises_rede-backup_cidr = local.vcn-onpremises_subnprv-rede-backup_cidr
-    onpremises_ip-nat = local.vcn-onpremises_ip-nat
-
+    onpremises_internet_cidr = local.vcn-onpremises_internet-cidr
+    onpremises_rede-app_cidr = local.vcn-onpremises_rede-app-cidr
+    onpremises_rede-backup_cidr = local.vcn-onpremises_rede-backup-cidr
+    
     #---------------------#
     # FIREWALL INTERNO #1 #
     #---------------------#
@@ -171,39 +170,76 @@ module "reserved-public-ip" {
     root_compartment = var.root_compartment
 }
 
-# Reserva da Endereço IP Publico
 module "vpn-ipsec" {
     source = "./vpn-ipsec"
     root_compartment = var.root_compartment
     drg_id = oci_core_drg.drg-interno.id
 
-    cpe_ip = module.reserved-public-ip.ipsec_reserved-public-ip
-    onpremises_vm-ipsec_ip = local.vm-onpremises_ipsec-ip
-
+    # Endereço IP Público do CPE (vm-ipsec-onpremises)
+    cpe_ip = module.reserved-public-ip.reserved-public-ip
+    cpe_private-ip = local.vcn-onpremises_internet-ip
+    
+    # On-premises BGP ASN
     ipsec-onpremises_asn = local.ipsec-onpremises_asn
+
+    # Site-To-Site VPN - Tunnel #1
     ipsec-onpremises_bgp_ip-1 = local.ipsec-onpremises_bgp_ip-1
     ipsec-onpremises_oci_ip-1 = local.ipsec-onpremises_oci_ip-1
+
+    # Site-To-Site VPN - Tunnel #2
     ipsec-onpremises_bgp_ip-2 = local.ipsec-onpremises_bgp_ip-2
     ipsec-onpremises_oci_ip-2 = local.ipsec-onpremises_oci_ip-2
 }
 
-# VCN On-Premises
+# On-Premises
 module "onpremises" {
     source = "./onpremises"
     root_compartment = var.root_compartment
+
     availability_domain = local.ads.gru_ad1_name
     os_image_id = local.compute_image_id.gru.ol96-arm
-
-    vcn_cidr = local.vcn-onpremises_cidr
-    subnpub-internet_cidr = local.vcn-onpremises_subnpub-internet-cidr 
-    subnprv-rede-app_cidr = local.vcn-onpremises_subnprv-rede-app_cidr
-    subnprv-rede-backup_cidr = local.vcn-onpremises_subnprv-rede-backup_cidr
     sgw_all_oci_services = local.gru_all_oci_services
 
-    # VM IPSec
-    vm-ipsec_ip = local.vm-onpremises_ipsec-ip
-    vm-ipsec_public-ip = module.reserved-public-ip.ipsec_reserved-public-ip
-    vm-ipsec_public-ip_id = module.reserved-public-ip.ipsec_reserved-public-ip_id
+    # VM IPsec - BGP ASN
+    ipsec-onpremises_asn = local.ipsec-onpremises_asn
+    ipsec_oracle_asn = local.ipsec-oracle_asn
+
+    # VM IPsec - VCN
+    vcn_cidr = local.vcn-onpremises_cidr
+
+    # IP Público Reservado
+    reserved-public-ip_id = module.reserved-public-ip.reserved-public-ip_id
+
+    # VM IPSec - Internet
+    vm-ipsec_internet_cidr = local.vcn-onpremises_internet-cidr
+    vm-ipsec_internet-ip = local.vcn-onpremises_internet-ip
+    vm-ipsec_internet-ip-gw = local.vcn-onpremises_internet-ip-gw
+    
+    # VM IPSec - Rede das Aplicações
+    vm-ipsec_rede-app_cidr = local.vcn-onpremises_rede-app-cidr
+    vm-ipsec_rede-app-ip = local.vcn-onpremises_rede-app-ip
+    vm-ipsec_rede-app-ip-gw = local.vcn-onpremises_rede-app-ip-gw
+
+    # VM IPSec - Rede de Backup
+    vm-ipsec_rede-backup_cidr = local.vcn-onpremises_rede-backup-cidr
+    vm-ipsec_rede-backup-ip = local.vcn-onpremises_rede-backup-ip
+    vm-ipsec_rede-backup-ip-gw = local.vcn-onpremises_rede-backup-ip-gw
+
+    # VM IPSec - Endereço IP Público Reservado
+    vm-ipsec_public-ip = module.reserved-public-ip.reserved-public-ip
+    vm-ipsec_public-ip_id = module.reserved-public-ip.reserved-public-ip_id
+
+    # VM IPSec - Tunnel #1
+    ipsec_tunnel-1_bgp_ip = local.ipsec-onpremises_bgp_ip-1
+    ipsec_tunnel-1_oci_ip = local.ipsec-onpremises_oci_ip-1
+    ipsec_tunnel-1_oci-public-ip = module.vpn-ipsec.tunnel-1_public-ip
+    ipsec_tunnel-1_shared-secret = module.vpn-ipsec.tunnel-1_shared-secret
+
+    # VM IPSec - Tunnel #2
+    ipsec_tunnel-2_bgp_ip = local.ipsec-onpremises_bgp_ip-1
+    ipsec_tunnel-2_oci_ip = local.ipsec-onpremises_oci_ip-1
+    ipsec_tunnel-2_oci-public-ip = module.vpn-ipsec.tunnel-2_public-ip
+    ipsec_tunnel-2_shared-secret = module.vpn-ipsec.tunnel-2_shared-secret
     
     # Meu endereço IP Publico.
     meu_ip-publico = local.meu_ip-publico    

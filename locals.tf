@@ -42,21 +42,28 @@ locals {
    fw-interno-2_lan-ip  = "10.70.10.21"
    fw-interno-2_internet-ip = "10.70.20.31"
    fw-interno-2_externo-ip = "10.80.30.41"
-   
-   # Rede On-premises
-   vcn-onpremises_cidr = "172.16.0.0/16"
-   vcn-onpremises_subnpub-internet-cidr = "172.16.100.0/24"
-   vcn-onpremises_subnprv-rede-app_cidr = "172.16.200.0/24"
-   vcn-onpremises_subnprv-rede-backup_cidr = "172.16.150.0/24"
-   
-   # IP NAT On-premises
-   vcn-onpremises_ip-nat = "172.16.200.10" 
 
-   # VM On-premises IPSec
-   vm-onpremises_ipsec-ip = "172.16.100.10"
+   # VM-IPsec On-premises - VCNs
+   vcn-onpremises_cidr = ["172.16.100.0/24", "10.200.10.0/24", "192.168.100.0/24"]
+   
+   # VM-IPSec On-Premises - Rede da Internet
+   vcn-onpremises_internet-cidr = "172.16.100.0/25"
+   vcn-onpremises_internet-ip = "172.16.100.5"
+   vcn-onpremises_internet-ip-gw = "172.16.100.1"
+
+   # VM-IPSec On-Premises - Rede das Aplicações
+   vcn-onpremises_rede-app-cidr = "10.200.10.128/26"
+   vcn-onpremises_rede-app-ip = "10.200.10.150"
+   vcn-onpremises_rede-app-ip-gw = "10.200.10.129"
+
+   # VM-IPSec On-Premises - Rede de Backup
+   vcn-onpremises_rede-backup-cidr = "192.168.100.64/26"
+   vcn-onpremises_rede-backup-ip = "192.168.100.120"
+   vcn-onpremises_rede-backup-ip-gw = "192.168.100.65"
 
    # Site-To-Site VPN
    ipsec-onpremises_asn = "64515"
+   ipsec-oracle_asn = "3000"
    ipsec-onpremises_bgp_ip-1 = "192.168.0.1/30"
    ipsec-onpremises_oci_ip-1 = "192.168.0.2/30"
    ipsec-onpremises_bgp_ip-2 = "192.168.0.5/30"

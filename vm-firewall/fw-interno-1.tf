@@ -46,10 +46,8 @@ resource "oci_core_instance" "fw-interno-1" {
        "vnic-internet-ip-gw" = "${var.fw-interno-1_internet-ip-gw}"
        "vcn-appl-1_cidr" =  "${var.vcn-appl-1_cidr}"
        "vcn-appl-2_cidr" = "${var.vcn-appl-2_cidr}"
-       "onpremises-cidr" = "${var.onpremises_cidr}"
        "onpremises-rede-app-cidr" = "${var.onpremises_rede-app_cidr}"
        "onpremises-rede-backup_cidr" = "${var.onpremises_rede-backup_cidr}"
-       "onpremises-ip-nat" = "${var.onpremises_ip-nat}"
     }
 
     # VNIC LAN

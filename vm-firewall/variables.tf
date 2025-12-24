@@ -127,22 +127,17 @@ variable "fw-interno-2_internet-ip-gw" {
 # On-Premises #
 #-------------#
 
-variable "onpremises_cidr" {
-    description = "CIDR da Rede On-premises."
+variable "onpremises_internet_cidr" {
+    description = "CIDR da Rede On-premises Internet."
     type = string
 }
 
 variable "onpremises_rede-app_cidr" {
-    description = "IDR da Rede On-premises das Aplicações"
+    description = "CIDR da Rede On-premises das Aplicações."
     type = string
 }
 
 variable "onpremises_rede-backup_cidr" {
     description = "CIDR da Rede On-premises de Backup."
-    type = string
-}
-
-variable "onpremises_ip-nat" {
-    description = "Endereço IP NAT que vem do On-premises."
     type = string
 }

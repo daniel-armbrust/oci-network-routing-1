@@ -31,7 +31,7 @@ resource "oci_core_drg_route_table_route_rule" "drg-interno_rpc_rt-routerule-1" 
     drg_route_table_id = oci_core_drg_route_table.drg-interno_rpc_rt.id
     
     // REDE DE BACKUP
-    destination = "${local.vcn-onpremises_subnprv-rede-backup_cidr}"
+    destination = "${local.vcn-onpremises_rede-backup-cidr}"
     destination_type = "CIDR_BLOCK"
 
     next_hop_drg_attachment_id = "${data.oci_core_drg_attachments.drg-interno_rpc-attch.drg_attachments[0].id}"

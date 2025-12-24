@@ -5,7 +5,7 @@
 
 # Atualiza, Instala e remove pacotes do Sistema Operacional
 #/usr/bin/dnf -y update
-/usr/bin/nice -n 15 /usr/bin/dnf -y install traceroute net-tools python39-oci-cli
+/usr/bin/nice -n 15 /usr/bin/dnf -y install traceroute net-tools python39-oci-cli libreswan
 /usr/bin/nice -n 15 /usr/bin/dnf -y remove setroubleshoot-server
 
 # Desabilita o SELinux
@@ -27,12 +27,27 @@ setenforce 0
 cat <<EOF >/etc/rc.d/rc.local
 #!/bin/bash
 
-# Download do script de configuração do Firewall e Policy Routing.
-oci --auth instance_principal os object get --bucket-name scripts-storage --name vm-firewall_rc-firewal.sh --file /etc/rc-firewall.sh
+# Download do script de configuração do IP Público Reservado.
+oci --auth instance_principal os object get --bucket-name scripts-storage --name ip-public-setup.sh --file /etc/ip-public-setup.sh
 
-# Execução do script de configuração do Firewall e Policy Routing.
+# Download do script de configuração do Firewall e Policy Routing.
+oci --auth instance_principal os object get --bucket-name scripts-storage --name rc-firewall-vm-ipsec-onpremises.sh --file /etc/rc-firewall.sh
+
+# Download do script de configuração da VPN.
+oci --auth instance_principal os object get --bucket-name scripts-storage --name vpn-setup.sh --file /etc/vpn-setup.sh
+
+# Download do script de configuração do BGP.
+oci --auth instance_principal os object get --bucket-name scripts-storage --name bgp-setup.sh --file /etc/bgp-setup.sh
+
+# Execução dos scripts
 chmod 0500 /etc/rc-firewall.sh
 /etc/rc-firewall.sh
+
+chmod 0500 /etc/vpn-setup.sh
+/etc/vpn-setup.sh
+
+chmod 0500 /etc/bgp-setup.sh
+/etc/bgp-setup.sh
 
 # From /etc/rc.local
 touch /var/lock/subsys/local

@@ -33,19 +33,20 @@ vcn_appl_1_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.16
 vcn_appl_2_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-appl-2_cidr`"
 
 # Rede On-Premises
-onpremises_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-cidr`"
+onpremises_internet_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-internet-cidr`"
 onpremises_rede_app_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-rede-app-cidr`"
 onpremises_rede_backup_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-rede-backup_cidr`"
-onpremises_ip_nat="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-ip-nat`"
 
 # Parâmetros do Kernel
 echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
+
 echo 0 > /proc/sys/net/ipv4/conf/$vnic_lan_iface/rp_filter
 echo 0 > /proc/sys/net/ipv4/conf/$vnic_internet_iface/rp_filter
 echo 0 > /proc/sys/net/ipv4/conf/$vnic_externo_iface/rp_filter
+
 echo 0 > /proc/sys/net/ipv4/conf/all/rp_filter
 echo 0 > /proc/sys/net/ipv4/conf/default/rp_filter
-echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
 
 #------------#
 # Roteamento #

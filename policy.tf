@@ -20,6 +20,6 @@ resource "oci_identity_policy" "tenancy-a_policies" {
     statements = [    
        "Allow dynamic-group ${oci_identity_dynamic_group.dyngrp_instance.name} to read buckets in compartment id ${var.root_compartment} where target.bucket.name='${oci_objectstorage_bucket.objectstorage_bucket.name}'",
        "Allow dynamic-group ${oci_identity_dynamic_group.dyngrp_instance.name} to read objects in compartment id ${var.root_compartment} where target.bucket.name='${oci_objectstorage_bucket.objectstorage_bucket.name}'",
-       "Allow dynamic-group ${oci_identity_dynamic_group.dyngrp_instance.name} to read virtual-network-family in compartment id ${var.root_compartment}"
+       "Allow dynamic-group ${oci_identity_dynamic_group.dyngrp_instance.name} to manage virtual-network-family in compartment id ${var.root_compartment}"
     ]
 }

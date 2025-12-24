@@ -17,7 +17,7 @@ resource "oci_core_ipsec" "onpremises_ipsec" {
     static_routes = ["0.0.0.0/0"]
 
     cpe_id = oci_core_cpe.cpe_vm-ipsec_onpremises.id
-    cpe_local_identifier = var.onpremises_vm-ipsec_ip
+    cpe_local_identifier = var.cpe_private-ip
 }
 
 resource "oci_core_ipsec_connection_tunnel_management" "onpremises_ipsec_tunnel-1" {

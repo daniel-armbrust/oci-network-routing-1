@@ -12,7 +12,7 @@ resource "oci_core_subnet" "subnpub-internet_vcn-onpremises" {
 
     display_name = "subnpub-internet"
     dns_label = "onpsubnpubinet"
-    cidr_block = "${var.subnpub-internet_cidr}"
+    cidr_block = "${var.vm-ipsec_internet_cidr}"
     prohibit_public_ip_on_vnic = false
 }
 
@@ -26,11 +26,11 @@ resource "oci_core_subnet" "subnprv-rede-app_vcn-onpremises" {
 
     display_name = "subnprv-rede-app"
     dns_label = "onpsubnprvapp"
-    cidr_block = "${var.subnprv-rede-app_cidr}"
-    prohibit_public_ip_on_vnic = false
+    cidr_block = "${var.vm-ipsec_rede-app_cidr}"
+    prohibit_public_ip_on_vnic = true
 }
 
-# Sub-rede Privada das Aplicações
+# Sub-rede Privada de Backup
 resource "oci_core_subnet" "subnprv-rede-backup_vcn-onpremises" {
     compartment_id = var.root_compartment
     vcn_id = oci_core_vcn.vcn-onpremises.id
@@ -38,8 +38,8 @@ resource "oci_core_subnet" "subnprv-rede-backup_vcn-onpremises" {
     route_table_id = oci_core_route_table.rt_subnprv-rede-backup_vcn-onpremises.id
     security_list_ids = [oci_core_security_list.secl-1_subnprv-rede-backup_vcn-onpremises.id]
 
-    display_name = "subnprv-rede-app"
+    display_name = "subnprv-rede-backup"
     dns_label = "onpsubnprvbkp"
-    cidr_block = "${var.subnprv-rede-backup_cidr}"
-    prohibit_public_ip_on_vnic = false
+    cidr_block = "${var.vm-ipsec_rede-backup_cidr}"
+    prohibit_public_ip_on_vnic = true
 }
