@@ -2,7 +2,7 @@
 
 # https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/libreswan.htm
 
-ipsec_pub_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/ipsec-pub-ip`"
+ipsec_pub_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/pub-ip`"
 
 tunnel_1_oci_pubip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-1-oci-pubip`"
 tunnel_1_shared_secret="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-1-shared-secret`"
@@ -51,6 +51,8 @@ cat <<EOF >/etc/ipsec.d/oci-ipsec.secrets
 ${ipsec_pub_ip} ${tunnel_1_oci_pubip}: PSK "${tunnel_1_shared_secret}"
 ${ipsec_pub_ip} ${tunnel_2_oci_pubip}: PSK "${tunnel_2_shared_secret}"
 EOF
+
+chmod 0400 /etc/ipsec.d/oci-ipsec.secrets
 
 # Habiltia e inicia o serviço de VPN.
 systemctl enable ipsec

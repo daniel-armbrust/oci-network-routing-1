@@ -43,6 +43,9 @@ oci --auth instance_principal os object get --bucket-name scripts-storage --name
 chmod 0500 /etc/rc-firewall.sh
 /etc/rc-firewall.sh
 
+chmod 0500 /etc/ip-public-setup.sh
+/etc/ip-public-setup.sh
+
 chmod 0500 /etc/vpn-setup.sh
 /etc/vpn-setup.sh
 

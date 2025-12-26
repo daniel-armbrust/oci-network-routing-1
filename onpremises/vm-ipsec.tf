@@ -63,7 +63,7 @@ resource "oci_core_instance" "vm-ipsec" {
        # Internet 
        "internet-cidr" = "${var.vm-ipsec_internet_cidr}"
        "internet-ip" = "${var.vm-ipsec_internet-ip}"
-       "internet-ip-gw" = "${var.vm-ipsec_internet-ip}"
+       "internet-ip-gw" = "${var.vm-ipsec_internet-ip-gw}"
 
        # Rede das Aplicações
        "rede-app-cidr" = "${var.vm-ipsec_rede-app_cidr}"
