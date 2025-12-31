@@ -48,6 +48,7 @@ resource "oci_core_drg_route_table" "drg-externo_vpn-ipsec_rt" {
 resource "oci_core_drg_attachment_management" "drg-externo_vpn-ipsec-attch_tunnel-1" {
    compartment_id = var.root_compartment
    drg_id = var.drg_id
+   display_name = "vpn-ipsec-attch_tunnel-1"
 
    attachment_type = "IPSEC_TUNNEL"   
    network_id = data.oci_core_ipsec_connection_tunnels.onpremises_ipsec_tunnels.ip_sec_connection_tunnels[0].id
@@ -61,6 +62,7 @@ resource "oci_core_drg_attachment_management" "drg-externo_vpn-ipsec-attch_tunne
 resource "oci_core_drg_attachment_management" "drg-externo_vpn-ipsec-attch_tunnel-2" {
    compartment_id = var.root_compartment
    drg_id = var.drg_id
+   display_name = "vpn-ipsec-attch_tunnel-2"
 
    attachment_type = "IPSEC_TUNNEL"   
    network_id = data.oci_core_ipsec_connection_tunnels.onpremises_ipsec_tunnels.ip_sec_connection_tunnels[1].id
