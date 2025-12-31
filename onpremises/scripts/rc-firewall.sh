@@ -30,17 +30,6 @@ rede_backup_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169
 rede_backup_ip_gw="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/rede-backup-ip-gw`"
 rede_backup_iface="`ip -o -f inet addr show | grep "$rede_backup_ip" | awk '{print $2}'`"
 
-oracle_asn="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/rede-backup-cidr`"
-onpremises_asn="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/rede-backup-cidr`"
-
-tunnel_1_bgp_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-1-bgp-ip`"
-tunnel_1_oci_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-1-oci-ip`"
-tunnel_1_oci_pubip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-1-oci-pubip`"
-
-tunnel_2_bgp_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-2-bgp-ip`"
-tunnel_2_oci_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-2-oci-ip`"
-tunnel_2_oci_pubip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-2-oci-pubip`"
-
 # Parâmetros do Kernel
 echo 1 > /proc/sys/net/ipv4/ip_forward
 echo 1 > /proc/sys/net/ipv6/conf/all/forwarding

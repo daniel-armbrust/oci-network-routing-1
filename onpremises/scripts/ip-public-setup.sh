@@ -17,12 +17,12 @@ vnic_private_ip_id="`oci --auth instance_principal network private-ip list --all
 vnic_public_ip_id="`oci --auth instance_principal network public-ip get --private-ip-id $vnic_private_ip_id --query 'data.id' | tr -d '[]" \n'`"
 
 # Endereço IP já foi trocado.
-if [ "$pub_ip" == "$vnic_public_ip_id" ]; then
+if [ "$pub_ip_id" == "$vnic_public_ip_id" ]; then
     exit 0
 fi
 
 # Altera temporariamente a rota padrão devido à remoção do IP Público Efêmero da interface 
-# primária. Essa ação é necessária para garantir a conectividade com a rede de serviços do OCI.
+# primária.
 ip route del default dev $internet_iface
 ip route add default via $rede_app_ip_gw dev $rede_app_iface
 

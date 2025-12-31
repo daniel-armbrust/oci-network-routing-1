@@ -45,19 +45,25 @@ resource "oci_core_instance" "vm-ipsec" {
        "pub-ip" = "${var.vm-ipsec_public-ip}"
        
        # ASN
-       "oracle-asn" = "${var.ipsec-onpremises_asn}"
-       "onpremises-asn" = "${var.ipsec_oracle_asn}"
+       "onpremises-asn" = "${var.ipsec-onpremises_asn}"
+       "oracle-asn" = "${var.ipsec_oracle_asn}"       
 
        # Tunnel #1
-       "tunnel-1-bgp-ip" = "${var.ipsec_tunnel-1_bgp_ip}"
-       "tunnel-1-oci-ip" = "${var.ipsec_tunnel-1_oci_ip}"
-       "tunnel-1-oci-pubip" = "${var.ipsec_tunnel-1_oci-public-ip}"
+       "tunnel-1-bgp-local-ip" = "${var.ipsec_tunnel-1_bgp-local-ip}"
+       "tunnel-1-bgp-local-ip-mask" = "${var.ipsec_tunnel-1_bgp-local-ip-mask}"
+       "tunnel-1-bgp-oci-ip" = "${var.ipsec_tunnel-1_bgp-oci-ip}"
+       "tunnel-1-bgp-oci-ip-mask" = "${var.ipsec_tunnel-1_bgp-oci-ip-mask}"
+       "tunnel-1-bgp-cidr" = "${var.ipsec_tunnel-1_bgp-cidr}"
+       "tunnel-1-bgp-oci-pubip" = "${var.ipsec_tunnel-1_bgp-oci-public-ip}"
        "tunnel-1-shared-secret" = "${var.ipsec_tunnel-1_shared-secret}"
 
        # Tunnel #2
-       "tunnel-2-bgp-ip" = "${var.ipsec_tunnel-2_bgp_ip}"
-       "tunnel-2-oci-ip" = "${var.ipsec_tunnel-2_oci_ip}"
-       "tunnel-2-oci-pubip" = "${var.ipsec_tunnel-2_oci-public-ip}"
+       "tunnel-2-bgp-local-ip" = "${var.ipsec_tunnel-2_bgp-local-ip}"
+       "tunnel-2-bgp-local-ip-mask" = "${var.ipsec_tunnel-2_bgp-local-ip-mask}"
+       "tunnel-2-bgp-oci-ip" = "${var.ipsec_tunnel-2_bgp-oci-ip}"
+       "tunnel-2-bgp-oci-ip-mask" = "${var.ipsec_tunnel-2_bgp-oci-ip-mask}"
+       "tunnel-2-bgp-cidr" = "${var.ipsec_tunnel-2_bgp-cidr}"
+       "tunnel-2-bgp-oci-pubip" = "${var.ipsec_tunnel-2_bgp-oci-public-ip}"
        "tunnel-2-shared-secret" = "${var.ipsec_tunnel-2_shared-secret}"
 
        # Internet 
@@ -79,7 +85,7 @@ resource "oci_core_instance" "vm-ipsec" {
     # VNIC - Internet
     create_vnic_details {
         display_name = "vnic-internet"
-        hostname_label = "vnicinet"
+        hostname_label = "vmipsec"
         private_ip = var.vm-ipsec_internet-ip       
         subnet_id = oci_core_subnet.subnpub-internet_vcn-onpremises.id
         skip_source_dest_check = true

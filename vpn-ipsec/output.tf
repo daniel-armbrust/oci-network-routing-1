@@ -26,6 +26,7 @@ data "oci_core_ipsec_connection_tunnel" "onpremises_ipsec_tunnel-2" {
 
 output "tunnel-1_shared-secret" {
    value = data.oci_core_ipsec_config.onpremises_ipsec_config.tunnels[0].shared_secret 
+   sensitive = true
 }
 
 output "tunnel-1_public-ip" {
@@ -37,7 +38,8 @@ output "tunnel-1_public-ip" {
 #-----------#
 
 output "tunnel-2_shared-secret" {
-   value = data.oci_core_ipsec_config.onpremises_ipsec_config.tunnels[1].shared_secret 
+   value = data.oci_core_ipsec_config.onpremises_ipsec_config.tunnels[1].shared_secret
+   sensitive = true
 }
 
 output "tunnel-2_public-ip" {

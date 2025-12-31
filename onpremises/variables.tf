@@ -121,17 +121,22 @@ variable "ipsec_oracle_asn" {
 # Tunnel #1 #
 #-----------#
 
-variable "ipsec_tunnel-1_bgp_ip" {
+variable "ipsec_tunnel-1_bgp-local-ip" {
     description = "On-premises IPSec Tunnel #1 - BGP IP"
     type = string
 }
 
-variable "ipsec_tunnel-1_oci_ip" {
+variable "ipsec_tunnel-1_bgp-oci-ip" {
     description = "OCI IPSec Tunnel #1 - BGP IP"
     type = string
 }
 
-variable "ipsec_tunnel-1_oci-public-ip" {
+variable "ipsec_tunnel-1_bgp-cidr" {
+    description = "OCI IPSec Tunnel #1 - BGP CIDR"
+    type = string
+}
+
+variable "ipsec_tunnel-1_bgp-oci-public-ip" {
     description = "OCI IPSec Tunnel #1 - IP Público"
     type = string
 }
@@ -141,27 +146,51 @@ variable "ipsec_tunnel-1_shared-secret" {
     type = string
 }
 
+variable "ipsec_tunnel-1_bgp-local-ip-mask" {
+    description = "Endereço IP e Máscara cliente #1."
+    type = string
+}
+
+variable "ipsec_tunnel-1_bgp-oci-ip-mask" {
+    description = "Endereço IP e Máscara OCI #1."
+    type = string
+}
+
 #-----------#
 # Tunnel #2 #
 #-----------#
 
-variable "ipsec_tunnel-2_bgp_ip" {
+variable "ipsec_tunnel-2_bgp-local-ip" {
     description = "On-premises IPSec Tunnel #2 - BGP IP"
     type = string
 }
 
-variable "ipsec_tunnel-2_oci_ip" {
+variable "ipsec_tunnel-2_bgp-oci-ip" {
     description = "OCI IPSec Tunnel #2 - BGP IP"
     type = string
 }
 
-variable "ipsec_tunnel-2_oci-public-ip" {
+variable "ipsec_tunnel-2_bgp-cidr" {
+    description = "OCI IPSec Tunnel #2 - BGP CIDR"
+    type = string
+}
+
+variable "ipsec_tunnel-2_bgp-oci-public-ip" {
     description = "OCI IPSec Tunnel #2 - IP Público"
     type = string
 }
 
 variable "ipsec_tunnel-2_shared-secret" {
-    description = "OCI IPSec Tunnel #2 - IP Público"
+    description = "OCI IPSec Shared Secret #2 - IP Público"
     type = string
 }
 
+variable "ipsec_tunnel-2_bgp-local-ip-mask" {
+    description = "Endereço IP e Máscara cliente #2."
+    type = string
+}
+
+variable "ipsec_tunnel-2_bgp-oci-ip-mask" {
+    description = "Endereço IP e Máscara OCI #2."
+    type = string
+}

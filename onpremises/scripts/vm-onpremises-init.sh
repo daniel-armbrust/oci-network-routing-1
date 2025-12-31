@@ -5,8 +5,9 @@
 
 # Atualiza, Instala e remove pacotes do Sistema Operacional
 #/usr/bin/dnf -y update
-/usr/bin/nice -n 15 /usr/bin/dnf -y install traceroute net-tools python39-oci-cli libreswan
-/usr/bin/nice -n 15 /usr/bin/dnf -y remove setroubleshoot-server
+/usr/bin/dnf -y install traceroute net-tools python39-oci-cli libreswan ncurses-devel readline-devel
+/usr/bin/dnf -y groupinstall "Development Tools"
+/usr/bin/dnf -y remove setroubleshoot-server
 
 # Desabilita o SELinux
 setenforce 0
@@ -22,6 +23,12 @@ setenforce 0
 
 # Aumenta o tamanho do boot volume
 /usr/libexec/oci-growfs -y
+
+# BIRD - BGP Daemon
+# https://bird.network.cz/
+/usr/bin/wget https://bird.network.cz/download/bird-3.1.2.tar.gz
+/usr/bin/tar zxvf bird-3.1.2.tar.gz
+cd bird-3.1.2/ && ./configure && make install && cd - && rm -rf bird-3.1.2/
 
 # Cria o arquivo rc.local
 cat <<EOF >/etc/rc.d/rc.local

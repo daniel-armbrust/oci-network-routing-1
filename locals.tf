@@ -63,11 +63,19 @@ locals {
 
    # Site-To-Site VPN
    ipsec-onpremises_asn = "64515"
-   ipsec-oracle_asn = "3000"
-   ipsec-onpremises_bgp_ip-1 = "192.168.0.1/30"
-   ipsec-onpremises_oci_ip-1 = "192.168.0.2/30"
-   ipsec-onpremises_bgp_ip-2 = "192.168.0.5/30"
-   ipsec-onpremises_oci_ip-2 = "192.168.0.6/30"
+   ipsec-oracle_asn = "31898"
+
+   ipsec_tunnel-1_bgp-local-ip = "192.168.0.1"
+   ipsec_tunnel-1_bgp-local-ip-mask = "192.168.0.1/30"
+   ipsec_tunnel-1_bgp-oci-ip = "192.168.0.2"
+   ipsec_tunnel-1_bgp-oci-ip-mask = "192.168.0.2/30"
+   ipsec_tunnel-1_bgp-cidr = "192.168.0.0/30"
+
+   ipsec_tunnel-2_bgp-local-ip = "192.168.0.5"
+   ipsec_tunnel-2_bgp-local-ip-mask = "192.168.0.5/30"
+   ipsec_tunnel-2_bgp-oci-ip = "192.168.0.6"
+   ipsec_tunnel-2_bgp-oci-ip-mask = "192.168.0.6/30"
+   ipsec_tunnel-2_bgp-cidr = "192.168.0.4/30"
    
    # Network Load Balancer do Firewall INTERNO #1 IP
    nlb_fw-interno_ip = "10.70.10.100"

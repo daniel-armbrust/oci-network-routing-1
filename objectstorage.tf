@@ -1,5 +1,6 @@
 #
-# objectstorage.tf#
+# objectstorage.tf
+#
 
 
 resource "oci_objectstorage_bucket" "objectstorage_bucket" {
@@ -66,7 +67,7 @@ resource "oci_objectstorage_object" "objectstorage_file_onpremises_vm-ipsec_bgp-
     bucket = "scripts-storage"
     namespace = local.objectstorage_ns    
        
-    object = "vpn-setup.sh"
+    object = "bgp-setup.sh"
     source = "./onpremises/scripts/bgp-setup.sh"
     content_type = "text/plain"
 

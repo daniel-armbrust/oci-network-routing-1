@@ -25,13 +25,14 @@ resource "oci_core_ipsec_connection_tunnel_management" "onpremises_ipsec_tunnel-
 
     ipsec_id = oci_core_ipsec.onpremises_ipsec.id
     tunnel_id = data.oci_core_ipsec_connection_tunnels.onpremises_ipsec_tunnels.ip_sec_connection_tunnels[0].id
+    ike_version = "V2"
 
     routing = "BGP"
 
     bgp_session_info {
         customer_bgp_asn = var.ipsec-onpremises_asn
-        customer_interface_ip = var.ipsec-onpremises_bgp_ip-1
-        oracle_interface_ip = var.ipsec-onpremises_oci_ip-1
+        customer_interface_ip = var.ipsec_tunnel-1_bgp-local-ip-mask
+        oracle_interface_ip = var.ipsec_tunnel-1_bgp-oci-ip-mask
     }
 }
 
@@ -40,12 +41,13 @@ resource "oci_core_ipsec_connection_tunnel_management" "onpremises_ipsec_tunnel-
 
     ipsec_id = oci_core_ipsec.onpremises_ipsec.id
     tunnel_id = data.oci_core_ipsec_connection_tunnels.onpremises_ipsec_tunnels.ip_sec_connection_tunnels[1].id
+    ike_version = "V2"
 
     routing = "BGP"
 
     bgp_session_info {
         customer_bgp_asn = var.ipsec-onpremises_asn
-        customer_interface_ip = var.ipsec-onpremises_bgp_ip-2
-        oracle_interface_ip = var.ipsec-onpremises_oci_ip-2
+        customer_interface_ip = var.ipsec_tunnel-2_bgp-local-ip-mask
+        oracle_interface_ip = var.ipsec_tunnel-2_bgp-oci-ip-mask
     }
 }

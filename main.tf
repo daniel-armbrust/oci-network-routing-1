@@ -173,7 +173,7 @@ module "reserved-public-ip" {
 module "vpn-ipsec" {
     source = "./vpn-ipsec"
     root_compartment = var.root_compartment
-    drg_id = oci_core_drg.drg-interno.id
+    drg_id = oci_core_drg.drg-externo.id
 
     # Endereço IP Público do CPE (vm-ipsec-onpremises)
     cpe_ip = module.reserved-public-ip.reserved-public-ip
@@ -183,12 +183,12 @@ module "vpn-ipsec" {
     ipsec-onpremises_asn = local.ipsec-onpremises_asn
 
     # Site-To-Site VPN - Tunnel #1
-    ipsec-onpremises_bgp_ip-1 = local.ipsec-onpremises_bgp_ip-1
-    ipsec-onpremises_oci_ip-1 = local.ipsec-onpremises_oci_ip-1
-
+    ipsec_tunnel-1_bgp-local-ip-mask = local.ipsec_tunnel-1_bgp-local-ip-mask
+    ipsec_tunnel-1_bgp-oci-ip-mask = local.ipsec_tunnel-1_bgp-oci-ip-mask
+ 
     # Site-To-Site VPN - Tunnel #2
-    ipsec-onpremises_bgp_ip-2 = local.ipsec-onpremises_bgp_ip-2
-    ipsec-onpremises_oci_ip-2 = local.ipsec-onpremises_oci_ip-2
+    ipsec_tunnel-2_bgp-local-ip-mask = local.ipsec_tunnel-2_bgp-local-ip-mask
+    ipsec_tunnel-2_bgp-oci-ip-mask = local.ipsec_tunnel-2_bgp-oci-ip-mask
 }
 
 # On-Premises
@@ -200,17 +200,13 @@ module "onpremises" {
     os_image_id = local.compute_image_id.gru.ol96-arm
     sgw_all_oci_services = local.gru_all_oci_services
 
-    # VM IPsec - BGP ASN
-    ipsec-onpremises_asn = local.ipsec-onpremises_asn
-    ipsec_oracle_asn = local.ipsec-oracle_asn
-
     # VM IPsec - VCN
     vcn_cidr = local.vcn-onpremises_cidr
 
     # IP Público Reservado
     reserved-public-ip_id = module.reserved-public-ip.reserved-public-ip_id
 
-    # VM IPSec - Internet
+    # VM IPSec - IP
     vm-ipsec_internet_cidr = local.vcn-onpremises_internet-cidr
     vm-ipsec_internet-ip = local.vcn-onpremises_internet-ip
     vm-ipsec_internet-ip-gw = local.vcn-onpremises_internet-ip-gw
@@ -229,18 +225,28 @@ module "onpremises" {
     vm-ipsec_public-ip = module.reserved-public-ip.reserved-public-ip
     vm-ipsec_public-ip_id = module.reserved-public-ip.reserved-public-ip_id
 
+    # VM IPsec - BGP ASN
+    ipsec-onpremises_asn = local.ipsec-onpremises_asn
+    ipsec_oracle_asn = local.ipsec-oracle_asn
+ 
     # VM IPSec - Tunnel #1
-    ipsec_tunnel-1_bgp_ip = local.ipsec-onpremises_bgp_ip-1
-    ipsec_tunnel-1_oci_ip = local.ipsec-onpremises_oci_ip-1
-    ipsec_tunnel-1_oci-public-ip = module.vpn-ipsec.tunnel-1_public-ip
+    ipsec_tunnel-1_bgp-local-ip = local.ipsec_tunnel-1_bgp-local-ip
+    ipsec_tunnel-1_bgp-local-ip-mask = local.ipsec_tunnel-1_bgp-local-ip-mask
+    ipsec_tunnel-1_bgp-oci-ip = local.ipsec_tunnel-1_bgp-oci-ip
+    ipsec_tunnel-1_bgp-oci-ip-mask = local.ipsec_tunnel-1_bgp-oci-ip-mask
+    ipsec_tunnel-1_bgp-cidr = local.ipsec_tunnel-1_bgp-cidr
+    ipsec_tunnel-1_bgp-oci-public-ip = module.vpn-ipsec.tunnel-1_public-ip
     ipsec_tunnel-1_shared-secret = module.vpn-ipsec.tunnel-1_shared-secret
-
+    
     # VM IPSec - Tunnel #2
-    ipsec_tunnel-2_bgp_ip = local.ipsec-onpremises_bgp_ip-1
-    ipsec_tunnel-2_oci_ip = local.ipsec-onpremises_oci_ip-1
-    ipsec_tunnel-2_oci-public-ip = module.vpn-ipsec.tunnel-2_public-ip
+    ipsec_tunnel-2_bgp-local-ip = local.ipsec_tunnel-2_bgp-local-ip
+    ipsec_tunnel-2_bgp-local-ip-mask = local.ipsec_tunnel-2_bgp-local-ip-mask
+    ipsec_tunnel-2_bgp-oci-ip = local.ipsec_tunnel-2_bgp-oci-ip
+    ipsec_tunnel-2_bgp-oci-ip-mask = local.ipsec_tunnel-2_bgp-oci-ip-mask
+    ipsec_tunnel-2_bgp-cidr = local.ipsec_tunnel-2_bgp-cidr
+    ipsec_tunnel-2_bgp-oci-public-ip = module.vpn-ipsec.tunnel-2_public-ip
     ipsec_tunnel-2_shared-secret = module.vpn-ipsec.tunnel-2_shared-secret
     
     # Meu endereço IP Publico.
-    meu_ip-publico = local.meu_ip-publico    
+    meu_ip-publico = local.meu_ip-publico
 }
