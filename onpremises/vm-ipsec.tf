@@ -81,7 +81,7 @@ resource "oci_core_instance" "vm-ipsec" {
        "rede-backup-ip" = "${var.vm-ipsec_rede-backup-ip}"
        "rede-backup-ip-gw" = "${var.vm-ipsec_rede-backup-ip-gw}"
     }
-
+    
     # VNIC - Internet
     create_vnic_details {
         display_name = "vnic-internet"

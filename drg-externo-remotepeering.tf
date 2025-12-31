@@ -13,7 +13,7 @@ resource "oci_core_remote_peering_connection" "drg-externo_rpc" {
 resource "oci_core_drg_route_distribution" "drg-externo_rpc_imp-rt-dst" {
     drg_id = oci_core_drg.drg-externo.id
     distribution_type = "IMPORT"
-    display_name = "import-routes_rpc"
+    display_name = "drg-externo_import-routes_rpc"
 }
 
 # DRG - Import Route Distribution Statement #1
@@ -61,7 +61,7 @@ resource "oci_core_drg_route_distribution_statement" "drg-externo_rpc_imp-rt-dst
 # DRG Route Table
 resource "oci_core_drg_route_table" "drg-externo_rpc_rt" {  
     drg_id = oci_core_drg.drg-externo.id
-    display_name = "rpc_rt"
+    display_name = "drg-externo_rpc_rt"
    
     import_drg_route_distribution_id = oci_core_drg_route_distribution.drg-externo_rpc_imp-rt-dst.id
 }

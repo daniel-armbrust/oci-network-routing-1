@@ -2,6 +2,10 @@
 # vcn-fw-interno/output.tf
 #
 
+output "vcn_id" {
+    value = oci_core_vcn.vcn-fw-interno.id
+}
+
 output "subnprv-lan_id" {
     value = oci_core_subnet.subnprv-lan_vcn-fw-interno.id
 }

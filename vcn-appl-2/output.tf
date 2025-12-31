@@ -2,6 +2,10 @@
 # vcn-appl-2/output.tf
 #
 
+output "vcn_id" {
+    value = oci_core_vcn.vcn-appl-2.id
+}
+
 output "subnprv-1_id" {
     value = oci_core_subnet.subnprv-1_vcn-appl-2.id
 }

@@ -40,6 +40,11 @@ protocol static {
     route ${rede_backup_cidr} via "vti2";
 }
 
+filter prepend_aspath {
+    bgp_path.prepend(64515);
+    accept;
+}
+
 protocol bgp oci_tunnel_1 {
   local as ${onpremises_asn};
   neighbor ${tunnel_1_bgp_oci_ip} as ${oracle_asn};
@@ -69,6 +74,9 @@ protocol bgp oci_tunnel_2 {
   ipv4 {
         import all;
         export all;
+
+        # Deixa o Tunel #2 com prioridade menor.
+        export filter prepend_aspath;
     };
 }
 EOF

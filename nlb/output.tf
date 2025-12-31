@@ -20,4 +20,8 @@ data "oci_core_private_ips" "nlb_fw-interno_private-ip" {
 
 output "nlb_fw-interno_private-ip_id" {
     value = data.oci_core_private_ips.nlb_fw-interno_private-ip.private_ips[0].id
+
+    depends_on = [
+        oci_network_load_balancer_listener.nlb_fw-interno_listener
+    ]
 }
