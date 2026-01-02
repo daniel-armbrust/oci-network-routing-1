@@ -29,13 +29,15 @@ vnic_externo_ip_gw="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254
 vnic_externo_iface="`ip -o -f inet addr show | grep "$vnic_externo_ip" | awk '{print $2}'`"
 
 # VCNs CIDRs
-vcn_appl_1_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-appl-1_cidr`"
-vcn_appl_2_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-appl-2_cidr`"
+vcn_fw_interno_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-fw-interno-cidr`"
+vcn_fw_externo_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-fw-externo-cidr`"
+vcn_appl_1_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-appl-1-cidr`"
+vcn_appl_2_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vcn-appl-2-cidr`"
 
 # Rede On-Premises
 onpremises_internet_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-internet-cidr`"
 onpremises_rede_app_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-rede-app-cidr`"
-onpremises_rede_backup_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-rede-backup_cidr`"
+onpremises_rede_backup_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/onpremises-rede-backup-cidr`"
 
 # Parâmetros do Kernel
 echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -68,9 +70,9 @@ ip rule add fwmark 3050 table internet
 ip rule add fwmark 3060 table externo
 
 # Rota para as redes On-Premises.
-ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
-ip route add $onpremises_rede_app_cidr via $vnic_externo_ip dev $vnic_externo_iface
-ip route add $onpremises_rede_backup_cidr via $vnic_externo_ip dev $vnic_externo_iface
+#ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
+#ip route add $onpremises_rede_app_cidr via $vnic_externo_ip dev $vnic_externo_iface
+#ip route add $onpremises_rede_backup_cidr via $vnic_externo_ip dev $vnic_externo_iface
 
 #-----------------#
 # Regras IPTables #
@@ -94,6 +96,9 @@ iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 169.254.0.0
 # NAT para a INTERNET
 iptables -t nat -A POSTROUTING -o $vnic_internet_iface -j MASQUERADE
 
+# Regra necessária para evitar a regra de acesso à Internet.
+iptables -t mangle -A OUTPUT -o $vnic_appl_iface -d $vcn_fw_interno_cidr -j RETURN
+
 # Permite que o firewall tenha acesso à Internet.
 iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 0.0.0.0/0 -j MARK --set-mark 3000
 iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 0.0.0.0/0 -j RETURN
@@ -103,8 +108,9 @@ iptables -t mangle -A OUTPUT -d $vcn_appl_1_cidr -j RETURN
 iptables -t mangle -A OUTPUT -d $vcn_appl_2_cidr -j RETURN
 
 # Permite que o firewall acesse as Redes do On-premises.
-iptables -t mangle -A OUTPUT -d $onpremises_cidr -j RETURN
-iptables -t mangle -A OUTPUT -d $onpremises_cidr_rede_backup -j RETURN
+iptables -t mangle -A OUTPUT -d $onpremises_internet_cidr -j RETURN
+iptables -t mangle -A OUTPUT -d $onpremises_rede_app_cidr -j RETURN
+iptables -t mangle -A OUTPUT -d $onpremises_rede_backup_cidr -j RETURN
 
 # Permite que as VCNs acessem a Internet.
 iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d 0.0.0.0/0 -j MARK --set-mark 3050  

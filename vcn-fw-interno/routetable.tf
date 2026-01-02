@@ -27,7 +27,7 @@ resource "oci_core_route_table" "rt_subnprv-appl_vcn-fw-interno" {
 resource "oci_core_route_table" "vcn-fw-interno_rt" {   
     compartment_id = var.root_compartment
     vcn_id = oci_core_vcn.vcn-fw-interno.id
-    display_name = "vcn-firewall_rt"
+    display_name = "vcn-fw-interno_rt"
 
     // Rota para o NLB do Firewall Interno
     route_rules {

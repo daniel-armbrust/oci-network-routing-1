@@ -43,8 +43,11 @@ resource "oci_core_instance" "firewall-2" {
        "vnic-externo-ip-gw" = "${var.firewall-2_externo-ip-gw}"
        "vnic-internet-ip" = "${var.firewall-2_internet-ip}"
        "vnic-internet-ip-gw" = "${var.firewall-2_internet-ip-gw}"
-       "vcn-appl-1_cidr" =  "${var.vcn-appl-1_cidr}"
-       "vcn-appl-2_cidr" = "${var.vcn-appl-2_cidr}"
+       "vcn-fw-interno-cidr" = "${var.vcn-fw-interno_cidr}"
+       "vcn-fw-externo-cidr" = "${var.vcn-fw-externo_cidr}"
+       "vcn-appl-1-cidr" =  "${var.vcn-appl-1_cidr}"
+       "vcn-appl-2-cidr" = "${var.vcn-appl-2_cidr}"
+       "onpremises-internet-cidr" = "${var.onpremises_internet_cidr}"
        "onpremises-rede-app-cidr" = "${var.onpremises_rede-app_cidr}"
        "onpremises-rede-backup_cidr" = "${var.onpremises_rede-backup_cidr}"
     }

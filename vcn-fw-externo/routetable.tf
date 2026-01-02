@@ -27,7 +27,7 @@ resource "oci_core_route_table" "rt_subnprv-externo_vcn-fw-externo" {
 resource "oci_core_route_table" "vcn-fw-externo_rt" {   
     compartment_id = var.root_compartment
     vcn_id = oci_core_vcn.vcn-fw-externo.id
-    display_name = "vcn-firewall_rt"
+    display_name = "vcn-fw-externo_rt"
 
     route_rules {
         destination = "${var.vcn-appl-1_cidr}"

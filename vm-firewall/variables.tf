@@ -21,6 +21,16 @@ variable "os_image_id" {
 # VCNs #
 #------#
 
+variable "vcn-fw-interno_cidr" {
+    description = "VCN-FIREWALL-INTERNO CIDR."
+    type = string
+}
+
+variable "vcn-fw-externo_cidr" {
+    description = "VCN-FIREWALL-INTERNO CIDR."
+    type = string
+}
+
 variable "vcn-appl-1_cidr" {
     description = "VCN-APPL-1 CIDR."
     type = string

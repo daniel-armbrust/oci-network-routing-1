@@ -89,6 +89,8 @@ module "vm-firewall" {
     os_image_id = local.compute_image_id.gru.ol96-arm
 
     # VCNs CIDRs.
+    vcn-fw-interno_cidr = local.vcn-fw-interno_cidr
+    vcn-fw-externo_cidr = local.vcn-fw-externo_cidr
     vcn-appl-1_cidr = local.vcn-appl-1_cidr
     vcn-appl-2_cidr = local.vcn-appl-2_cidr
     
