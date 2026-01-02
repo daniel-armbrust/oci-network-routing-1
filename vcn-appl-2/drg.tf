@@ -45,16 +45,16 @@ resource "oci_core_drg_route_table" "drg-interno-rt_vcn-appl-2" {
     import_drg_route_distribution_id = oci_core_drg_route_distribution.drg-interno_vcn-appl-2_imp-rt-dst.id
 }
 
-# Route Rules para o FIREWALL
-# resource "oci_core_drg_route_table_route_rule" "drg-interno_vcn-appl-2_rt-routerule-1" {
-#     drg_route_table_id = oci_core_drg_route_table.drg-interno-rt_vcn-appl-2.id
+# FIREWALL
+resource "oci_core_drg_route_table_route_rule" "drg-interno_vcn-appl-2_rt-routerule-1" {
+    drg_route_table_id = oci_core_drg_route_table.drg-interno-rt_vcn-appl-2.id
     
-#     // Firewall Interno
-#     destination = "0.0.0.0/0"
-#     destination_type = "CIDR_BLOCK"
+    // Firewall Interno
+    destination = "0.0.0.0/0"
+    destination_type = "CIDR_BLOCK"
 
-#     next_hop_drg_attachment_id = var.drg-interno-attch_vcn-fw-interno_id
-# }
+    next_hop_drg_attachment_id = var.drg-interno-attch_vcn-fw-interno_id
+}
 
 # DRG Attachment
 resource "oci_core_drg_attachment" "drg-interno-attch_vcn-appl-2" {
@@ -63,7 +63,8 @@ resource "oci_core_drg_attachment" "drg-interno-attch_vcn-appl-2" {
 
     network_details {
         id = oci_core_vcn.vcn-appl-2.id
-        type = "VCN"                
+        type = "VCN"
+        vcn_route_type = "VCN_CIDRS"                
     }
 
     drg_route_table_id = oci_core_drg_route_table.drg-interno-rt_vcn-appl-2.id

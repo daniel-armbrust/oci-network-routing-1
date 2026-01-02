@@ -23,26 +23,23 @@ resource "oci_core_drg_route_distribution_statement" "drg-interno_vcn-appl-1_imp
     priority = 1
 }
 
-# DRG - Import Route Distribution Statement #3
-resource "oci_core_drg_route_distribution_statement" "drg-interno_vcn-appl-1_imp-rt-dst_stm-3" {
-    drg_route_distribution_id = oci_core_drg_route_distribution.drg-interno_vcn-appl-1_imp-rt-dst.id
-    
-    action = "ACCEPT"
-
-    match_criteria {
-        match_type = "DRG_ATTACHMENT_TYPE"      
-        attachment_type = "REMOTE_PEERING_CONNECTION"         
-    }
-
-    priority = 2
-}
-
 # DRG Route Table
 resource "oci_core_drg_route_table" "drg-interno-rt_vcn-appl-1" {  
     drg_id = var.drg_id
     display_name = "drg-attch-rt_vcn-appl-1"
    
     import_drg_route_distribution_id = oci_core_drg_route_distribution.drg-interno_vcn-appl-1_imp-rt-dst.id
+}
+
+# FIREWALL
+resource "oci_core_drg_route_table_route_rule" "drg-interno_vcn-appl-1_rt-routerule-1" {
+    drg_route_table_id = oci_core_drg_route_table.drg-interno-rt_vcn-appl-1.id
+    
+    // Firewall Interno
+    destination = "0.0.0.0/0"
+    destination_type = "CIDR_BLOCK"
+
+    next_hop_drg_attachment_id = var.drg-interno-attch_vcn-fw-interno_id
 }
 
 # DRG Attachment
@@ -52,7 +49,8 @@ resource "oci_core_drg_attachment" "drg-interno-attch_vcn-appl-1" {
 
     network_details {
         id = oci_core_vcn.vcn-appl-1.id
-        type = "VCN"                
+        type = "VCN"
+        vcn_route_type = "VCN_CIDRS"               
     }
 
     drg_route_table_id = oci_core_drg_route_table.drg-interno-rt_vcn-appl-1.id

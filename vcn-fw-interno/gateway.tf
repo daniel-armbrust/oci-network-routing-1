@@ -12,11 +12,3 @@ resource "oci_core_service_gateway" "sgw_vcn-fw-interno" {
         service_id = var.sgw_all_oci_services
     }
 }
-
-# Internet Gateway
-resource "oci_core_internet_gateway" "igw_vcn-fw-interno" {
-    compartment_id = var.root_compartment
-    vcn_id = oci_core_vcn.vcn-fw-interno.id    
-    display_name = "igw"    
-    enabled = true   
-}

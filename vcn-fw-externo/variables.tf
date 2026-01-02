@@ -21,6 +21,21 @@ variable "vcn_cidr" {
     type = string
 }
 
-variable "subnprv_cidr" {
+variable "subnprv-externo_cidr" {
+    type = string
+}
+
+variable "nlb_fw-externo_ip_id" {
+    description = "OCID do IP privado do Network Load Balancer."
+    type = string
+}
+
+variable "vcn-appl-1_cidr" {
+    description = "VCN-APPL-1 CIDR."
+    type = string
+}
+
+variable "vcn-appl-2_cidr" {
+    description = "VCN-APPL-2 CIDR."
     type = string
 }

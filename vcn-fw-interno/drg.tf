@@ -53,7 +53,8 @@ resource "oci_core_drg_attachment" "drg-interno-attch_vcn-fw-interno" {
     network_details {
         id = oci_core_vcn.vcn-fw-interno.id
         route_table_id = oci_core_route_table.vcn-fw-interno_rt.id
-        type = "VCN"                       
+        type = "VCN"
+        vcn_route_type = "VCN_CIDRS"                       
     }
 
     drg_route_table_id = oci_core_drg_route_table.drg-interno-rt_vcn-fw-interno.id

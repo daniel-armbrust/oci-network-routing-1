@@ -40,8 +40,8 @@ module "vcn-fw-interno" {
     root_compartment = var.root_compartment
 
     vcn_cidr = local.vcn-fw-interno_cidr
-    subnprv_cidr = local.vcn-fw-interno_subnprv-1_cidr
-    subnpub_cidr = local.vcn-fw-interno_subnpub-1_cidr
+    subnprv-appl_cidr = local.vcn-fw-interno_subnprv-appl_cidr
+    
     vcn-appl-1_drg-attch_id = module.vcn-appl-1.drg-attch_id
     vcn-appl-2_drg-attch_id = module.vcn-appl-2.drg-attch_id
     
@@ -50,9 +50,6 @@ module "vcn-fw-interno" {
 
     # OCID do Endereço IP do Network Load Balancer do Firewall Interno.
     nlb_fw-interno_ip_id = module.nlb.nlb_fw-interno_private-ip_id
-
-    # Meu endereço IP Publico.
-    meu_ip-publico = local.meu_ip-publico    
 }
 
 # VCN do Firewall Externo (vcn-fw-externo)
@@ -61,9 +58,16 @@ module "vcn-fw-externo" {
     root_compartment = var.root_compartment
 
     vcn_cidr = local.vcn-fw-externo_cidr
-    subnprv_cidr = local.vcn-fw-externo_subnprv-1_cidr
+    subnprv-externo_cidr = local.vcn-fw-externo_subnprv-externo_cidr
     drg_id = oci_core_drg.drg-externo.id
     sgw_all_oci_services = local.gru_all_oci_services
+
+    # OCID do Endereço IP do Network Load Balancer do Firewall Externo.
+    nlb_fw-externo_ip_id = module.nlb.nlb_fw-externo_private-ip_id
+
+    # VCN-APPL-1, VCN-APPL-2.
+    vcn-appl-1_cidr = local.vcn-appl-1_cidr
+    vcn-appl-2_cidr = local.vcn-appl-2_cidr
 }
 
 # VCN Publica (vcn-publica)
@@ -72,7 +76,10 @@ module "vcn-publica" {
     root_compartment = var.root_compartment
 
     vcn_cidr = local.vcn-publica_cidr
-    subnpub_cidr = local.vcn-publica_subnpub-1_cidr
+    subnpub-internet_cidr = local.vcn-publica_subnpub-internet_cidr
+
+    # Meu endereço IP Publico.
+    meu_ip-publico = local.meu_ip-publico 
 }
 
 module "vm-firewall" {
@@ -84,12 +91,11 @@ module "vm-firewall" {
     # VCNs CIDRs.
     vcn-appl-1_cidr = local.vcn-appl-1_cidr
     vcn-appl-2_cidr = local.vcn-appl-2_cidr
-    vcn-fw-externo_cidr = local.vcn-fw-externo_cidr
-
+    
     # OCID das Sub-redes das VCNs INTERNO, EXTERNO e PUBLICA (internet outbound).
-    subnprv-lan_id = module.vcn-fw-interno.subnprv-lan_id
-    subnprv-externo_id = module.vcn-fw-externo.subnprv-1_id
-    subnpub-internet_id = module.vcn-fw-interno.subnpub-internet_id
+    subnprv-appl_id = module.vcn-fw-interno.subnprv-appl_id
+    subnprv-externo_id = module.vcn-fw-externo.subnprv-externo_id
+    subnpub-internet_id = module.vcn-publica.subnpub-internet_id
 
     # On-premises
     onpremises_internet_cidr = local.vcn-onpremises_internet-cidr
@@ -101,32 +107,32 @@ module "vm-firewall" {
     #---------------------#
 
     # Firewall Interno #1 - IP LAN e IP do Gateway da Sub-rede.
-    fw-interno-1_lan-ip = local.fw-interno-1_lan-ip
-    fw-interno-1_lan-ip-gw = local.vcn-fw-interno_subnprv-1_ip-gw
+    firewall-1_appl-ip = local.firewall-1_appl-ip
+    firewall-1_appl-ip-gw = local.vcn-fw-interno_subnprv-appl_ip-gw
 
     # Firewall Interno #1 - IP EXTERNO e IP do Gateway da Sub-rede.
-    fw-interno-1_externo-ip = local.fw-interno-1_externo-ip
-    fw-interno-1_externo-ip-gw = local.vcn-fw-externo_subnprv-1_ip-gw
+    firewall-1_externo-ip = local.firewall-1_externo-ip
+    firewall-1_externo-ip-gw = local.vcn-fw-externo_subnprv-externo_ip-gw
 
     # Firewall Interno #1 - IP INTERNET e IP do Gateway da Sub-rede.
-    fw-interno-1_internet-ip = local.fw-interno-1_internet-ip
-    fw-interno-1_internet-ip-gw = local.vcn-publica_subnpub-1_ip-gw    
+    firewall-1_internet-ip = local.firewall-1_internet-ip
+    firewall-1_internet-ip-gw = local.vcn-publica_subnpub-internet_ip-gw    
 
     #---------------------#
     # FIREWALL INTERNO #2 #
     #---------------------#
 
     # Firewall Interno #2 - IP LAN e IP do Gateway da Sub-rede.
-    fw-interno-2_lan-ip = local.fw-interno-2_lan-ip
-    fw-interno-2_lan-ip-gw = local.vcn-fw-interno_subnprv-1_ip-gw
+    firewall-2_appl-ip = local.firewall-2_appl-ip
+    firewall-2_appl-ip-gw = local.vcn-fw-interno_subnprv-appl_ip-gw
 
     # Firewall Interno #2 - IP EXTERNO e IP do Gateway da Sub-rede.
-    fw-interno-2_externo-ip = local.fw-interno-2_externo-ip
-    fw-interno-2_externo-ip-gw = local.vcn-fw-externo_subnprv-1_ip-gw
+    firewall-2_externo-ip = local.firewall-2_externo-ip
+    firewall-2_externo-ip-gw = local.vcn-fw-externo_subnprv-externo_ip-gw
 
     # Firewall Interno #2 - IP INTERNET e IP do Gateway da Sub-rede.
-    fw-interno-2_internet-ip = local.fw-interno-2_internet-ip
-    fw-interno-2_internet-ip-gw = local.vcn-publica_subnpub-1_ip-gw    
+    firewall-2_internet-ip = local.firewall-2_internet-ip
+    firewall-2_internet-ip-gw = local.vcn-publica_subnpub-internet_ip-gw    
 }
 
 module "vm-appl" {
@@ -149,19 +155,19 @@ module "nlb" {
     source = "./nlb"
     root_compartment = var.root_compartment
 
-    # Endereço IP do Network Load Balancer do Firewall Interno.
     nlb_fw-interno_ip = local.nlb_fw-interno_ip
+    nlb_fw-externo_ip = local.nlb_fw-externo_ip
 
-    # OCID da Sub-rede Privada do Firewall Interno.
-    fw-interno_subnet_id = module.vcn-fw-interno.subnprv-lan_id
-    
-    # Endereço IP LAN do Firewall Interno.
-    fw-interno-1_lan-ip = local.fw-interno-1_lan-ip 
-    fw-interno-2_lan-ip = local.fw-interno-2_lan-ip
-   
-    depends_on = [
-        module.vm-firewall
-    ]
+    fw-interno_subnet_id = module.vcn-fw-interno.subnprv-appl_id
+    fw-externo_subnet_id = module.vcn-fw-externo.subnprv-externo_id
+       
+    # Firewall #1
+    firewall-1_appl-ip = local.firewall-1_appl-ip 
+    firewall-1_externo-ip = local.firewall-1_externo-ip
+
+    # Firewall #2
+    firewall-2_appl-ip = local.firewall-2_appl-ip
+    firewall-2_externo-ip = local.firewall-2_externo-ip
 }
 
 # Reserva da Endereço IP Publico
@@ -189,6 +195,12 @@ module "vpn-ipsec" {
     # Site-To-Site VPN - Tunnel #2
     ipsec_tunnel-2_bgp-local-ip-mask = local.ipsec_tunnel-2_bgp-local-ip-mask
     ipsec_tunnel-2_bgp-oci-ip-mask = local.ipsec_tunnel-2_bgp-oci-ip-mask
+
+    # VCN-FW-EXTERNO - DRG Attachment
+    # NOTA: O IPSec "aprende" somente as redes da VCN-FW-EXTERNO. Essa configuração é necessária
+    # para direcionar todo o tráfego que vem do IPSec para o Firewall.
+    # (não é possível trabalhar com rotas estáticas uma vez que o IPSec on-premises utiliza BGP).
+    vcn-fw-externo_drg-attch_id = module.vcn-fw-externo.drg-attch_id
 }
 
 # On-Premises

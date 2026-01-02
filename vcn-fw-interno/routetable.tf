@@ -3,10 +3,10 @@
 #
 
 # Route Table - Sub-rede Privada LAN
-resource "oci_core_route_table" "rt_subnprv-lan_vcn-fw-interno" {   
+resource "oci_core_route_table" "rt_subnprv-appl_vcn-fw-interno" {   
     compartment_id = var.root_compartment
     vcn_id = oci_core_vcn.vcn-fw-interno.id
-    display_name = "rt_subnprv-lan"   
+    display_name = "rt_subnprv-appl"   
 
     # Service Gateway
     route_rules {
@@ -20,20 +20,6 @@ resource "oci_core_route_table" "rt_subnprv-lan_vcn-fw-interno" {
         destination = "0.0.0.0/0"
         destination_type = "CIDR_BLOCK"
         network_entity_id = var.drg_id     
-    }
-}
-
-# Route Table - Sub-rede Publica INTERNET
-resource "oci_core_route_table" "rt_subnpub-internet_vcn-fw-interno" {   
-    compartment_id = var.root_compartment
-    vcn_id = oci_core_vcn.vcn-fw-interno.id
-    display_name = "rt_subnpub-internet"   
-
-    # Internet Gateway
-    route_rules {
-        destination = "0.0.0.0/0"
-        destination_type = "CIDR_BLOCK"
-        network_entity_id = oci_core_internet_gateway.igw_vcn-fw-interno.id        
     }
 }
 

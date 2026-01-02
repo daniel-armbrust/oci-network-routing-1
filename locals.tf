@@ -18,30 +18,34 @@ locals {
 
    # VCN-FW-INTERNO
    vcn-fw-interno_cidr = "10.70.0.0/16"
-   vcn-fw-interno_subnprv-1_cidr = "10.70.10.0/24"
-   vcn-fw-interno_subnprv-1_ip-gw = "10.70.10.1"
-   vcn-fw-interno_subnpub-1_cidr = "10.70.20.0/24"
-   vcn-fw-interno_subnpub-1_ip-gw = "10.70.20.1"
+   vcn-fw-interno_subnprv-appl_cidr = "10.70.10.0/24"
+   vcn-fw-interno_subnprv-appl_ip-gw = "10.70.10.1"
 
    # VCN-FW-EXTERNO
    vcn-fw-externo_cidr = "10.80.0.0/16"
-   vcn-fw-externo_subnprv-1_cidr = "10.80.30.0/24"
-   vcn-fw-externo_subnprv-1_ip-gw = "10.80.30.1"
+   vcn-fw-externo_subnprv-externo_cidr = "10.80.30.0/24"
+   vcn-fw-externo_subnprv-externo_ip-gw = "10.80.30.1"
 
    # VCN-PUBLICA
    vcn-publica_cidr = "10.90.0.0/16"
-   vcn-publica_subnpub-1_cidr = "10.90.20.0/24"
-   vcn-publica_subnpub-1_ip-gw = "10.90.20.1"
+   vcn-publica_subnpub-internet_cidr = "10.90.20.0/24"
+   vcn-publica_subnpub-internet_ip-gw = "10.90.20.1"
 
-   # Firewall INTERNO #1 IPs
-   fw-interno-1_lan-ip = "10.70.10.20"
-   fw-interno-1_internet-ip = "10.70.20.30"
-   fw-interno-1_externo-ip = "10.80.30.40"
+   # Firewall #1 IPs
+   firewall-1_appl-ip = "10.70.10.20"
+   firewall-1_internet-ip = "10.90.20.60"
+   firewall-1_externo-ip = "10.80.30.40"
   
-   # Firewall INTERNO #2 IPs
-   fw-interno-2_lan-ip  = "10.70.10.21"
-   fw-interno-2_internet-ip = "10.70.20.31"
-   fw-interno-2_externo-ip = "10.80.30.41"
+   # Firewall #2 IPs
+   firewall-2_appl-ip  = "10.70.10.21"
+   firewall-2_internet-ip = "10.90.20.80"
+   firewall-2_externo-ip = "10.80.30.41"
+
+   # Network Load Balancer do Firewall INTERNO
+   nlb_fw-interno_ip = "10.70.10.100"
+
+   # Network Load Balancer do Firewall EXTERNO
+   nlb_fw-externo_ip = "10.80.30.100"
 
    # VM-IPsec On-premises - VCNs
    vcn-onpremises_cidr = ["172.16.100.0/24", "10.200.10.0/24", "192.168.100.0/24"]
@@ -76,9 +80,6 @@ locals {
    ipsec_tunnel-2_bgp-oci-ip = "192.168.0.6"
    ipsec_tunnel-2_bgp-oci-ip-mask = "192.168.0.6/30"
    ipsec_tunnel-2_bgp-cidr = "192.168.0.4/30"
-   
-   # Network Load Balancer do Firewall INTERNO #1 IP
-   nlb_fw-interno_ip = "10.70.10.100"
 
    # Service Gateway
    gru_all_oci_services = lookup(data.oci_core_services.gru_all_oci_services.services[0], "id")

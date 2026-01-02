@@ -31,17 +31,12 @@ variable "vcn-appl-2_cidr" {
     type = string
 }
 
-variable "vcn-fw-externo_cidr" {
-    description = "VCN-FW-EXTERNO CIDR."
-    type = string
-}
-
 #--------------------#
 # OCID das Sub-redes #
 #--------------------#
 
-variable "subnprv-lan_id" {
-    description = "ID da Sub-rede LAN."
+variable "subnprv-appl_id" {
+    description = "ID da Sub-rede Appl."
     type = string
 }
 
@@ -55,71 +50,71 @@ variable "subnpub-internet_id" {
     type = string
 }
 
-#---------------------#
-# FIREWALL INTERNO #1 #
-#---------------------#
+#-------------#
+# FIREWALL #1 #
+#-------------#
 
-variable "fw-interno-1_lan-ip" {
-    description = "Endereço IP LAN do Firewall Interno #1."
+variable "firewall-1_appl-ip" {
+    description = "Endereço IP APPL do Firewall #1."
     type = string
 }
 
-variable "fw-interno-1_lan-ip-gw" {
-    description = "Endereço IP do Gateway LAN do Firewall Interno #1."
+variable "firewall-1_appl-ip-gw" {
+    description = "Endereço IP do Gateway APPL do Firewall #1."
     type = string
 }
 
-variable "fw-interno-1_externo-ip" {
-    description = "Endereço IP EXTERNO do Firewall Interno #1."
+variable "firewall-1_externo-ip" {
+    description = "Endereço IP EXTERNO do Firewall #1."
     type = string
 }
 
-variable "fw-interno-1_externo-ip-gw" {
-    description = "Endereço IP do Gateway EXTERNO do Firewall Interno #1."
+variable "firewall-1_externo-ip-gw" {
+    description = "Endereço IP do Gateway EXTERNO do Firewall #1."
     type = string
 }
 
-variable "fw-interno-1_internet-ip" {
-    description = "Endereço IP INTERNET do Firewall Interno #1."
+variable "firewall-1_internet-ip" {
+    description = "Endereço IP INTERNET do Firewall #1."
     type = string
 }
 
-variable "fw-interno-1_internet-ip-gw" {
-    description = "Endereço IP do Gateway de INTERNET do Firewall Interno #1."
+variable "firewall-1_internet-ip-gw" {
+    description = "Endereço IP do Gateway de INTERNET do Firewall #1."
     type = string
 }
 
-#---------------------#
-# FIREWALL INTERNO #2 #
-#---------------------#
+#-------------#
+# FIREWALL #2 #
+#-------------#
 
-variable "fw-interno-2_lan-ip" {
-    description = "Endereço IP LAN do Firewall Interno #2."
+variable "firewall-2_appl-ip" {
+    description = "Endereço IP APPL do Firewall #2."
     type = string
 }
 
-variable "fw-interno-2_lan-ip-gw" {
-    description = "Endereço IP do Gateway LAN do Firewall Interno #2."
+variable "firewall-2_appl-ip-gw" {
+    description = "Endereço IP do Gateway APPL do Firewall #2."
     type = string
 }
 
-variable "fw-interno-2_externo-ip" {
-    description = "Endereço IP EXTERNO do Firewall Interno #2."
+variable "firewall-2_externo-ip" {
+    description = "Endereço IP EXTERNO do Firewall #2."
     type = string
 }
 
-variable "fw-interno-2_externo-ip-gw" {
-    description = "Endereço IP do Gateway EXTERNO do Firewall Interno #2."
+variable "firewall-2_externo-ip-gw" {
+    description = "Endereço IP do Gateway EXTERNO do Firewall #2."
     type = string
 }
 
-variable "fw-interno-2_internet-ip" {
-    description = "Endereço IP INTERNET do Firewall Interno #2."
+variable "firewall-2_internet-ip" {
+    description = "Endereço IP INTERNET do Firewall #2."
     type = string
 }
 
-variable "fw-interno-2_internet-ip-gw" {
-    description = "Endereço IP do Gateway de INTERNET do Firewall Interno #2."
+variable "firewall-2_internet-ip-gw" {
+    description = "Endereço IP do Gateway de INTERNET do Firewall #2."
     type = string
 }
 

@@ -10,6 +10,7 @@ tunnel_2_bgp_local_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.
 tunnel_2_bgp_oci_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-2-bgp-oci-ip`"
 tunnel_2_bgp_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/tunnel-2-bgp-cidr`"
 
+internet_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/internet-cidr`"
 rede_app_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/rede-app-cidr`"
 rede_backup_cidr="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/rede-backup-cidr`"
 
@@ -34,6 +35,8 @@ protocol kernel {
 
 protocol static {
     ipv4;
+    route ${internet_cidr} via "vti1";
+    route ${internet_cidr} via "vti2";
     route ${rede_app_cidr} via "vti1";
     route ${rede_app_cidr} via "vti2";
     route ${rede_backup_cidr} via "vti1";

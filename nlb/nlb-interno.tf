@@ -10,8 +10,6 @@ resource "oci_network_load_balancer_network_load_balancer" "nlb_fw-interno" {
     subnet_id = var.fw-interno_subnet_id       
     
     is_private = true
-
-    # Em teste.
     is_preserve_source_destination = true
     is_symmetric_hash_enabled = true
 }
@@ -51,8 +49,8 @@ resource "oci_network_load_balancer_backend" "nlb_fw-interno-1" {
     
     backend_set_name = "fw-interno_backendset"    
 
-    name = "fw-interno-1"
-    ip_address = var.fw-interno-1_lan-ip
+    name = "firewall-1"
+    ip_address = var.firewall-1_appl-ip
     port = 0
     is_backup = false
     is_drain = false
@@ -69,8 +67,8 @@ resource "oci_network_load_balancer_backend" "nlb_fw-interno-2" {
     
     backend_set_name = "fw-interno_backendset"    
 
-    name = "fw-interno-2"
-    ip_address = var.fw-interno-2_lan-ip
+    name = "firewall-2"
+    ip_address = var.firewall-2_appl-ip
     port = 0
     is_backup = false
     is_drain = false

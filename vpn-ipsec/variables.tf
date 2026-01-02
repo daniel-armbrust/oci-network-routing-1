@@ -22,6 +22,15 @@ variable "drg_id" {
     type = string  
 }
 
+#---------------------------------#
+# VCN-FW-EXTERNO - DRG Attachment #
+#---------------------------------#
+
+variable "vcn-fw-externo_drg-attch_id" {
+    description = "VCN-FW-EXTERNO - DRG Attachment."
+    type = string  
+}
+
 #-----#
 # ASN #
 #-----#

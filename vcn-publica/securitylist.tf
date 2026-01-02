@@ -2,8 +2,8 @@
 # vcn-publica/securitylist.tf
 #
 
-# Security List - Sub-rede Publica #1 (subnpub-1)
-resource "oci_core_security_list" "secl-1_subnpub-1_vcn-publica" {
+# Security List - Sub-rede Publica
+resource "oci_core_security_list" "secl-1_subnpub-internet_vcn-publica" {
     compartment_id = var.root_compartment
     vcn_id = oci_core_vcn.vcn-publica.id
     display_name = "secl-1_subnpub-1"
@@ -13,5 +13,12 @@ resource "oci_core_security_list" "secl-1_subnpub-1_vcn-publica" {
         destination_type = "CIDR_BLOCK"
         protocol = "all"
         stateless = false
+    }
+
+    ingress_security_rules {
+        source = "${var.meu_ip-publico}"
+        protocol = "all"
+        source_type = "CIDR_BLOCK"
+        stateless = true
     }
 }

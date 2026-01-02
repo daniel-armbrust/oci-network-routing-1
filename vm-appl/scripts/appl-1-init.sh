@@ -4,9 +4,9 @@
 #/usr/bin/timedatectl set-timezone America/Sao_Paulo
 
 # Atualiza, Instala e remove pacotes do Sistema Operacional
-/usr/bin/nice -n 15 /usr/bin/dnf -y update
-/usr/bin/nice -n 15 /usr/bin/dnf -y install traceroute net-tools python39-oci-cli
-/usr/bin/nice -n 15 /usr/bin/dnf -y remove setroubleshoot-server
+/usr/bin/dnf -y update
+/usr/bin/dnf -y install traceroute net-tools python39-oci-cli
+/usr/bin/dnf -y remove setroubleshoot-server
 
 # Desabilita o SELinux
 setenforce 0

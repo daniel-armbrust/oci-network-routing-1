@@ -52,7 +52,9 @@ resource "oci_core_drg_attachment" "drg-externo-attch_vcn-fw-externo" {
 
     network_details {
         id = oci_core_vcn.vcn-fw-externo.id
-        type = "VCN"                
+        route_table_id = oci_core_route_table.vcn-fw-externo_rt.id
+        type = "VCN" 
+        vcn_route_type = "VCN_CIDRS"                      
     }
 
     drg_route_table_id = oci_core_drg_route_table.drg-externo-rt_vcn-fw-externo.id

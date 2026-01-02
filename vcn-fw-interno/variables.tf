@@ -22,11 +22,6 @@ variable "nlb_fw-interno_ip_id" {
     type = string
 }
 
-variable "meu_ip-publico" {
-    description = "Meu endereço IP Público"
-    type = string
-}
-
 variable "vcn-appl-1_drg-attch_id" {
     type = string
 }
@@ -39,10 +34,6 @@ variable "vcn_cidr" {
     type = string
 }
 
-variable "subnprv_cidr" {
-    type = string
-}
-
-variable "subnpub_cidr" {
+variable "subnprv-appl_cidr" {
     type = string
 }

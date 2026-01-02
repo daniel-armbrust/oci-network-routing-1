@@ -1,12 +1,11 @@
 #
-# vm-firewall/fw-interno-1.tf
+# vm-firewall/firewall-2.tf
 #
 
-# FW-INTERNO-1
-resource "oci_core_instance" "fw-interno-1" {
+resource "oci_core_instance" "firewall-2" {
     compartment_id = var.root_compartment
     availability_domain = var.availability_domain    
-    display_name = "fw-interno-1"
+    display_name = "firewall-2"
 
     shape = "VM.Standard.A1.Flex" 
 
@@ -38,12 +37,12 @@ resource "oci_core_instance" "fw-interno-1" {
     }
 
     extended_metadata = {       
-       "vnic-lan-ip" = "${var.fw-interno-1_lan-ip}"
-       "vnic-lan-ip-gw" = "${var.fw-interno-1_lan-ip-gw}"
-       "vnic-externo-ip" = "${var.fw-interno-1_externo-ip}" 
-       "vnic-externo-ip-gw" = "${var.fw-interno-1_externo-ip-gw}"
-       "vnic-internet-ip" = "${var.fw-interno-1_internet-ip}"
-       "vnic-internet-ip-gw" = "${var.fw-interno-1_internet-ip-gw}"
+       "vnic-appl-ip" = "${var.firewall-2_appl-ip}"
+       "vnic-appl-ip-gw" = "${var.firewall-2_appl-ip-gw}"
+       "vnic-externo-ip" = "${var.firewall-2_externo-ip}" 
+       "vnic-externo-ip-gw" = "${var.firewall-2_externo-ip-gw}"
+       "vnic-internet-ip" = "${var.firewall-2_internet-ip}"
+       "vnic-internet-ip-gw" = "${var.firewall-2_internet-ip-gw}"
        "vcn-appl-1_cidr" =  "${var.vcn-appl-1_cidr}"
        "vcn-appl-2_cidr" = "${var.vcn-appl-2_cidr}"
        "onpremises-rede-app-cidr" = "${var.onpremises_rede-app_cidr}"
@@ -52,25 +51,25 @@ resource "oci_core_instance" "fw-interno-1" {
 
     # VNIC LAN
     create_vnic_details {
-        display_name = "fw-interno-1_vnic-lan"
-        hostname_label = "fwinterno1lan"
-        private_ip = var.fw-interno-1_lan-ip         
-        subnet_id = var.subnprv-lan_id
+        display_name = "vnic-appl"
+        hostname_label = "fw2"
+        private_ip = var.firewall-2_appl-ip         
+        subnet_id = var.subnprv-appl_id
         skip_source_dest_check = true
         assign_public_ip = false
         assign_ipv6ip = false
     }
 }
 
-# VNIC VCN-EXTERNO FW-INTERNO-2
-resource "oci_core_vnic_attachment" "fw-interno-1_vnic-externo" {  
+# VNIC Externa
+resource "oci_core_vnic_attachment" "firewall-2_vnic-externo" {  
     display_name = "vnic-externo"
-    instance_id = oci_core_instance.fw-interno-1.id
+    instance_id = oci_core_instance.firewall-2.id
       
     create_vnic_details {    
-        display_name = "fw-interno-1_vnic-externo"    
-        hostname_label = "fwinterno1ext"
-        private_ip = var.fw-interno-1_externo-ip               
+        display_name = "vnic-externo"    
+        hostname_label = "fw2ext"
+        private_ip = var.firewall-2_externo-ip               
         subnet_id = var.subnprv-externo_id 
         skip_source_dest_check = true
         assign_public_ip = false
@@ -78,19 +77,19 @@ resource "oci_core_vnic_attachment" "fw-interno-1_vnic-externo" {
     }    
 
     depends_on = [
-        oci_core_instance.fw-interno-1
+        oci_core_instance.firewall-2
     ]   
 }
 
 # VNIC INTERNET
-resource "oci_core_vnic_attachment" "fw-interno-1_vnic-internet" {  
+resource "oci_core_vnic_attachment" "firewall-2_vnic-internet" {  
     display_name = "vnic-internet"
-    instance_id = oci_core_instance.fw-interno-1.id
+    instance_id = oci_core_instance.firewall-2.id
       
     create_vnic_details {    
-        display_name = "fw-interno-1_vnic-internet"    
-        hostname_label = "fwinterno1inet"
-        private_ip = var.fw-interno-1_internet-ip               
+        display_name = "vnic-internet"    
+        hostname_label = "fw2int"
+        private_ip = var.firewall-2_internet-ip               
         subnet_id = var.subnpub-internet_id
         skip_source_dest_check = true
         assign_public_ip = true
@@ -98,6 +97,6 @@ resource "oci_core_vnic_attachment" "fw-interno-1_vnic-internet" {
     }    
 
     depends_on = [
-        oci_core_instance.fw-interno-1
+        oci_core_instance.firewall-2
     ]   
 }

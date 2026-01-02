@@ -11,6 +11,11 @@ variable "vcn_cidr" {
     type = string
 }
 
-variable "subnpub_cidr" {
+variable "subnpub-internet_cidr" {
+    type = string
+}
+
+variable "meu_ip-publico" {
+    description = "Meu endereço IP Público"
     type = string
 }

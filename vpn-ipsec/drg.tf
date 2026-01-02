@@ -15,26 +15,12 @@ resource "oci_core_drg_route_distribution_statement" "drg-externo_vpn-ipsec_imp-
     
     action = "ACCEPT"
 
-     match_criteria {
-        match_type = "DRG_ATTACHMENT_TYPE" 
-        attachment_type = "VCN"               
+    match_criteria {
+        match_type = "DRG_ATTACHMENT_TYPE"      
+        attachment_type = "VCN"         
     }
 
     priority = 1
-}
-
-# DRG - Import Route Distribution Statement #2
-resource "oci_core_drg_route_distribution_statement" "drg-externo_vpn-ipsec_imp-rt-dst_stm-2" {
-    drg_route_distribution_id = oci_core_drg_route_distribution.drg-externo_vpn-ipsec_imp-rt-dst.id
-    
-    action = "ACCEPT"
-
-     match_criteria {
-        match_type = "DRG_ATTACHMENT_TYPE" 
-        attachment_type = "REMOTE_PEERING_CONNECTION"               
-    }
-
-    priority = 2
 }
 
 # DRG Route Table
