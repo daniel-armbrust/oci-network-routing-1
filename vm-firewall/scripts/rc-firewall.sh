@@ -67,7 +67,7 @@ ip rule add from $vnic_appl_ip fwmark 3000 lookup internet priority 3000
 ip rule add fwmark 3050 table internet
 
 # Policy Route das regras "marcadas" com o valor 3060 (Firewall Acessa a Rede Externa).
-ip rule add fwmark 3060 table externo
+#ip rule add fwmark 3060 table externo
 
 # Rota para as redes On-Premises.
 ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
