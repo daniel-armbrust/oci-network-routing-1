@@ -23,20 +23,6 @@ resource "oci_core_drg_route_distribution_statement" "drg-interno_vcn-appl-1_imp
     priority = 1
 }
 
-# DRG - Import Route Distribution Statement #3
-resource "oci_core_drg_route_distribution_statement" "drg-interno_vcn-appl-2_imp-rt-dst_stm-2" {
-    drg_route_distribution_id = oci_core_drg_route_distribution.drg-interno_vcn-appl-2_imp-rt-dst.id
-    
-    action = "ACCEPT"
-
-    match_criteria {
-        match_type = "DRG_ATTACHMENT_TYPE"      
-        attachment_type = "REMOTE_PEERING_CONNECTION"         
-    }
-
-    priority = 2
-}
-
 # DRG Route Table
 resource "oci_core_drg_route_table" "drg-interno-rt_vcn-appl-2" {  
     drg_id = var.drg_id

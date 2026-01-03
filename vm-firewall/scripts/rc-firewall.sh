@@ -13,7 +13,7 @@ if [ -z "`grep externo /etc/iproute2/rt_tables`" ]; then
    echo '600 externo' >> /etc/iproute2/rt_tables
 fi
 
-# VNIC LAN 
+# VNIC APPL 
 vnic_appl_ip="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vnic-appl-ip`"
 vnic_appl_ip_gw="`curl -s -H "Authorization: Bearer Oracle" -L http://169.254.169.254/opc/v2/instance/metadata/vnic-appl-ip-gw`"
 vnic_appl_iface="`ip -o -f inet addr show | grep "$vnic_appl_ip" | awk '{print $2}'`"
@@ -50,34 +50,6 @@ echo 0 > /proc/sys/net/ipv4/conf/$vnic_externo_iface/rp_filter
 echo 0 > /proc/sys/net/ipv4/conf/all/rp_filter
 echo 0 > /proc/sys/net/ipv4/conf/default/rp_filter
 
-#------------#
-# Roteamento #
-#------------#
-
-# Rota default para a Internet
-ip route add default via $vnic_internet_ip_gw dev $vnic_internet_iface table internet
-
-# Rota default para a Rede Externa.
-ip route add default via $vnic_externo_ip_gw dev $vnic_externo_iface table externo
-
-# Policy Route das regras "marcadas" com o valor 3000 (Firewall Acessa a Internet).
-ip rule add from $vnic_appl_ip fwmark 3000 lookup internet priority 3000
-
-# Policy Route das regras "marcadas" com o valor 3050 (VCNs acessam a Internet).
-ip rule add fwmark 3050 table internet
-
-# Policy Route das regras "marcadas" com o valor 3060 (Firewall Acessa a Rede Externa).
-#ip rule add fwmark 3060 table externo
-
-# Rota para as redes On-Premises.
-ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
-ip route add $onpremises_rede_app_cidr via $vnic_externo_ip dev $vnic_externo_iface
-ip route add $onpremises_rede_backup_cidr via $vnic_externo_ip dev $vnic_externo_iface
-
-#-----------------#
-# Regras IPTables #
-#-----------------#
-
 iptables -t filter -F
 iptables -t filter -X
 iptables -t filter -Z
@@ -96,26 +68,68 @@ iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 169.254.0.0
 # NAT para a INTERNET
 iptables -t nat -A POSTROUTING -o $vnic_internet_iface -j MASQUERADE
 
-# Regra necessária para evitar a regra de acesso à Internet.
+#------------------#
+# Tabela Principal #
+#------------------#
+
 iptables -t mangle -A OUTPUT -o $vnic_appl_iface -d $vcn_fw_interno_cidr -j RETURN
+iptables -t mangle -A OUTPUT -o $vnic_appl_iface -d $vcn_appl_1_cidr -j RETURN
+iptables -t mangle -A OUTPUT -o $vnic_appl_iface -d $vcn_appl_2_cidr -j RETURN
+
+ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
+ip route add $onpremises_rede_app_cidr via $vnic_externo_ip dev $vnic_externo_iface
+ip route add $onpremises_rede_backup_cidr via $vnic_externo_ip dev $vnic_externo_iface
+
+#----------------#
+# Tabela Externo #
+#----------------#
+
+iptables -t mangle -A OUTPUT -o $vnic_externo_iface -j MARK --set-mark 3000
+iptables -t mangle -A OUTPUT -o $vnic_externo_iface -j RETURN
+
+# Permite que as VCNs das aplicações acessem as redes On-Premises.
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d $onpremises_internet_cidr -j MARK --set-mark 3000
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d $onpremises_internet_cidr -j RETURN
+
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d $onpremises_internet_cidr -j MARK --set-mark 3000
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d $onpremises_internet_cidr -j RETURN
+
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d $onpremises_rede_app_cidr -j MARK --set-mark 3000
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d $onpremises_rede_app_cidr -j RETURN
+
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d $onpremises_rede_app_cidr -j MARK --set-mark 3000
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d $onpremises_rede_app_cidr -j RETURN
+
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d $onpremises_rede_backup_cidr -j MARK --set-mark 3000
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d $onpremises_rede_backup_cidr -j RETURN
+
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d $onpremises_rede_backup_cidr -j MARK --set-mark 3000
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d $onpremises_rede_backup_cidr -j RETURN
+
+ip route add default via $vnic_externo_ip_gw dev $vnic_externo_iface table externo
+ip rule add from $vnic_externo_ip fwmark 3000 lookup externo priority 3000
+ip rule add fwmark 3000 lookup externo priority 3001
+
+#-----------------#
+# Tabela Internet #
+#-----------------#
+
+iptables -t mangle -A OUTPUT -o $vnic_internet_iface -j MARK --set-mark 3060
+iptables -t mangle -A OUTPUT -o $vnic_internet_iface -j RETURN
+
+# Permite que as VCNs das aplicações acessem a Internet.
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d 0.0.0.0/0 -j MARK --set-mark 3060
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d 0.0.0.0/0 -j RETURN
+
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d 0.0.0.0/0 -j MARK --set-mark 3060
+iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d 0.0.0.0/0 -j RETURN
 
 # Permite que o firewall tenha acesso à Internet.
-iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 0.0.0.0/0 -j MARK --set-mark 3000
+iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 0.0.0.0/0 -j MARK --set-mark 3060
 iptables -t mangle -A OUTPUT -o $vnic_appl_iface -s $vnic_appl_ip -d 0.0.0.0/0 -j RETURN
 
-# Permite que o firewall acesse as VCNs de Aplicação.
-iptables -t mangle -A OUTPUT -d $vcn_appl_1_cidr -j RETURN
-iptables -t mangle -A OUTPUT -d $vcn_appl_2_cidr -j RETURN
-
-# Permite que o firewall acesse as Redes do On-premises.
-iptables -t mangle -A OUTPUT -d $onpremises_internet_cidr -j RETURN
-iptables -t mangle -A OUTPUT -d $onpremises_rede_app_cidr -j RETURN
-iptables -t mangle -A OUTPUT -d $onpremises_rede_backup_cidr -j RETURN
-
-# Permite que as VCNs acessem a Internet.
-iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d 0.0.0.0/0 -j MARK --set-mark 3050  
-iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_1_cidr -d 0.0.0.0/0 -j RETURN
-iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d 0.0.0.0/0 -j MARK --set-mark 3050  
-iptables -t mangle -A PREROUTING -i $vnic_appl_iface -s $vcn_appl_2_cidr -d 0.0.0.0/0 -j RETURN
+ip route add default via $vnic_internet_ip_gw dev $vnic_internet_iface table internet
+ip rule add from $vnic_internet_ip fwmark 3060 lookup internet priority 3060 
+ip rule add fwmark 3060 lookup internet priority 3061
 
 exit 0
