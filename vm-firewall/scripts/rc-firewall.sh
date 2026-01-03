@@ -70,9 +70,9 @@ ip rule add fwmark 3050 table internet
 ip rule add fwmark 3060 table externo
 
 # Rota para as redes On-Premises.
-#ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
-#ip route add $onpremises_rede_app_cidr via $vnic_externo_ip dev $vnic_externo_iface
-#ip route add $onpremises_rede_backup_cidr via $vnic_externo_ip dev $vnic_externo_iface
+ip route add $onpremises_internet_cidr via $vnic_externo_ip dev $vnic_externo_iface
+ip route add $onpremises_rede_app_cidr via $vnic_externo_ip dev $vnic_externo_iface
+ip route add $onpremises_rede_backup_cidr via $vnic_externo_ip dev $vnic_externo_iface
 
 #-----------------#
 # Regras IPTables #
